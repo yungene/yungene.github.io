@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Express</title>
+  <title>J.C.-Demo</title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
   
 </head>
@@ -21,7 +21,7 @@
     <h2>Data for repo:Mindustry by owner:Anuken</h2>
     <div id="chart"></div>
   </div>
-  <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+   <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
   <script type="text/javascript">
   // Add event listener to only execute JS after the page is loaded
   document.addEventListener('DOMContentLoaded', function(e) {
@@ -278,6 +278,7 @@
       var x02 = xScale.invert(d3.mouse(this)[0]);
       var i2 = bisect(dateData, x02, 0);
       var selectedData2 = dateData[i2];
+      if(selectedData && selectedData2){
       focus
         .attr("cx", xScale(selectedData.key))
         .attr("cy", yScale(selectedData.value));
@@ -289,6 +290,7 @@
         .html(selectedData2.value)
         .attr("x", xScale(selectedData2.key))
         .attr("y", -5);
+      }
     }
     // On mouse out, hide the text and cursor
     function mouseout() {
@@ -346,17 +348,19 @@
       var x02 = xScale.invert(d3.mouse(this)[0]);
       var i2 = bisect(dateData, x02, 0);
       var selectedData2 = dateData[i2];
+      if(selectedData && selectedData2){
       focus
-        .attr("cx", xScale(selectedData.key))
+        .attr("cx", selectedData?xScale(selectedData.key):xScale.range()[1])
         .attr("cy", yScale(selectedData.value));
       focusText
         .html("x:" + selectedData.key.toDateString() + "  -  " + "y:" + selectedData.value)
-        .attr("x", xScale(selectedData.key) + 15)
-        .attr("y", yScale(selectedData.value));
+        .attr("x", selectedData?xScale(selectedData.key) + 15:xScale.range()[1]+15)
+        .attr("y", selectedData?yScale(selectedData.value):yAxis.range()[1]);
       focusRelease
-        .html(selectedData2.value)
-        .attr("x", xScale(selectedData2.key))
+        .html(selectedData2?selectedData2.value:"")
+        .attr("x", selectedData2?xScale(selectedData2.key):xScale.range()[1])
         .attr("y", -5);
+      }
     }
 
     // If user double click, reinitialize the chart
@@ -384,3 +388,4 @@
 </script>
 </body>
 </html>
+
